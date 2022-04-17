@@ -104,7 +104,8 @@ class UserController extends Controller
             $user->last_name    =   $request->last_name;
             $user->email        =   $request->email;
             $user->password     =   bcrypt($request->password);
-            $user->status       =   'Active';
+            // $user->status       =   'Active';
+            $user->status       =   'Inactive';
             $formattedPhone        = str_replace('+' . $request->carrier_code, "", $request->formatted_phone);
             $user->phone           = !empty($request->phone) ? preg_replace("/[\s-]+/", "", $formattedPhone) : NULL;
             $user->default_country = isset($request->default_country) ? $request->default_country : NULL;
