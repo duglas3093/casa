@@ -90,8 +90,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
 		Route::get('customer/bookings/{id}/booking_list_csv', 'BookingsController@bookingCsv');
 		Route::get('customer/bookings/{id}/booking_list_pdf', 'BookingsController@bookingPdf');
 
-		Route::get('customer/payouts/{id}/payouts_list_pdf', 'PayoutsController@payoutsPdf');
 		Route::get('customer/payouts/{id}/payouts_list_csv', 'PayoutsController@payoutsCsv');
+		Route::get('customer/payouts/{id}/payouts_list_pdf', 'PayoutsController@payoutsPdf');
 
 		Route::get('customer/customer_list_csv', 'CustomerController@customerCsv');
 		Route::get('customer/customer_list_pdf', 'CustomerController@customerPdf');

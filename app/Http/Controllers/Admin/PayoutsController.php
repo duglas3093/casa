@@ -232,7 +232,10 @@ class PayoutsController extends Controller
         return $pdf->download('payouts_list_' . time() . '.pdf', array("Attachment" => 0));
     }
 
-    public function payoutsCsv($id = null)
+    /**
+     * deberia de retornar un excel
+     */
+    public function payoutsCsv()
     { 
         return Excel::download(new PayoutsExport, 'payouts_sheet' . time() .'.xls');
     }

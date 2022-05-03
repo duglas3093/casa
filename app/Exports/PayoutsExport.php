@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Payouts;
+use App\Models\User;
 use App\Models\Withdrawal;
 
 use Maatwebsite\Excel\Concerns\FromArray;
@@ -22,7 +23,9 @@ class PayoutsExport implements FromArray,WithHeadings,ShouldAutoSize
         $types              = isset(request()->types) ? request()->types : null;
         $property           = isset(request()->types) ? request()->types : null;
 
-        $query = Withdrawal::orderBy('id', 'desc')->select();
+        $query = Withdrawal::orderBy('users.id', 'desc')->select();
+        // $query = User::orderBy('id', 'desc')->select();
+        $query->leftJoin('users','user_id','=','users.id');
         if ($from) {
             $query->whereDate('created_at', '>=', $from);
         }
@@ -36,12 +39,13 @@ class PayoutsExport implements FromArray,WithHeadings,ShouldAutoSize
         }
 
 
-        $payoutsList = $query->get();
         $data = [];
+        $payoutsList = $query->get();
         
         if ($payoutsList->count()) {
             foreach ($payoutsList as $key => $value) {
-                $data[$key]['User']            = $value->user->full_name;
+                // $data[$key]['User']            = $value->user->full_name;
+                $data[$key]['User']            = $value->first_name." ".$value->last_name;
                 $data[$key]['Payouts Account'] = $value->payment_methods->name;
                 $data[$key]['Amount']          = $value->amount;
                 $data[$key]['Status']          = $value->status;
