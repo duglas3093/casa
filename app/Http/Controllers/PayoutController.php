@@ -14,7 +14,8 @@ use App\Models\{
     Wallet,
     Accounts,
     PaymentMethods,
-    Currency
+    Currency,
+    Bank
 };
 
 use App\DataTables\PayoutListDataTable;
@@ -37,7 +38,7 @@ class PayoutController extends Controller
     {   
         $data['title'] = 'Payout Setting';
         $data['payouts'] = PayoutSetting::with('payment_methods')->where(['user_id' => Auth::user()->id])->paginate(Session::get('row_per_page'));
-
+        $data['banks'] = Bank::getAll();
         $data['countries'] = Country::getAll();
         $data['paymentMethods'] = PaymentMethods::whereNotIn('name', ['Revepay', 'Stripe', 'Wallet'])->get();
 
@@ -95,14 +96,14 @@ class PayoutController extends Controller
             $rules = array(
                 'bank_account_holder_name'    => 'required|max:255',
                 'bank_account_number'         => 'required|max:255',
-                'swift_code'                  => 'required|max:255',
+                // 'swift_code'                  => 'required|max:255',
                 'bank_name'                   => 'required|max:255',
             );
 
             $fieldNames = array(
                 'bank_account_holder_name'    => 'Bank Account Holder Name',
                 'bank_account_number'         => 'Bank Account Number/IBAN',
-                'swift_code'                  => 'BVN Number',
+                // 'swift_code'                  => 'BVN Number',
                 'bank_name'                   => 'Bank Name', 
             );
 
@@ -120,10 +121,10 @@ class PayoutController extends Controller
                 $payoutSetting->account_number      = $request->bank_account_number;
                 $payoutSetting->bank_branch_name    = $request->branch_name;
                 $payoutSetting->bank_branch_city    = $request->branch_city;
-                $payoutSetting->swift_code          = $request->swift_code;
-                $payoutSetting->bank_branch_address = $request->branch_address;
                 $payoutSetting->bank_name           = $request->bank_name;
-                $payoutSetting->country             = $request->country;
+                // $payoutSetting->swift_code          = $request->swift_code;
+                // $payoutSetting->bank_branch_address = $request->branch_address;
+                // $payoutSetting->country             = $request->country;
                 $payoutSetting->save();
 
 
@@ -149,6 +150,7 @@ class PayoutController extends Controller
        if (!$request->isMethod('post')) {
             $data['payoutSetting'] = PayoutSetting::with('payment_methods')->find($request->id);
             $data['countries'] = Country::all();
+            $data['banks'] = Bank::getAll();
            return view('payouts.edit',$data);
         } elseif ($request->isMethod('post')) {
             if($request->payout_type == 1){
@@ -173,20 +175,20 @@ class PayoutController extends Controller
                 $rules = array(
                     'bank_account_holder_name'    => 'required|max:255',
                     'bank_account_number'         => 'required|max:255',
-                    'branch_name'                 => 'required|max:255',
+                    // 'branch_name'                 => 'required|max:255',
                     'branch_city'                 => 'required|max:255',
-                    'swift_code'                  => 'required|max:255',
-                    'branch_address'              => 'required|max:255',
-                    'bank_name'                   => 'required|max:255',   
+                    // 'swift_code'                  => 'required|max:255',
+                    // 'branch_address'              => 'required|max:255',
+                    'bank_name'                   => 'required',   
                 );
                 
                 $fieldNames = array(
                     'bank_account_holder_name'    => 'Bank Account Holder Name',
                     'bank_account_number'         => 'Bank Account Number/IBAN',
-                    'branch_name'                 => 'Branch Name',
+                    // 'branch_name'                 => 'Branch Name',
                     'branch_city'                 => 'Branch City',
-                    'swift_code'                  => 'SWIFT Code',
-                    'branch_address'              => 'Branch Address',
+                    // 'swift_code'                  => 'SWIFT Code',
+                    // 'branch_address'              => 'Branch Address',
                     'bank_name'                   => 'Bank Name', 
                 );
 

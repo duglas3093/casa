@@ -797,7 +797,7 @@ return [
         'sign_in'               => 'Inicio de sesion',
         'before_performing'     => 'antes de efectuar',
         'remember_me'           => 'Recuerdame',
-         'wishlist'              =>'Lista de deseos',
+        'wishlist'              =>'Lista de deseos',
         'apply'                 =>'Solicitar',
         'payment_details'       =>'Detalles del pago',
         'payment_status'       =>'Estado',
@@ -805,6 +805,8 @@ return [
         'payment_details'       =>'Detalles del pago',
         'payment_status'       =>'Estado',
         'payment_action'       =>'Acción',
+        'maximum_two_accounts' =>'Maximo dos cuentas',
+        'message_no_payment_methods' => 'Solo es posible tener 2 metodos de pago.',
     ],
 
     'feeds' => [

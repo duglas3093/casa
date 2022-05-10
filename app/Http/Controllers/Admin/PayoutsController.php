@@ -51,8 +51,7 @@ class PayoutsController extends Controller
         $this->helper = new Common;
     }
 
-    public function index(PayoutsDataTable $dataTable)
-    {
+    public function index(PayoutsDataTable $dataTable){
 
         $data['from'] = isset(request()->from) ? request()->from : null;
         $data['to']   = isset(request()->to) ? request()->to : null;
@@ -66,7 +65,7 @@ class PayoutsController extends Controller
             $status     = request()->status;
             $from       = request()->from;
             $to         = request()->to;
-            if (isset(request()->property)) {
+            if (isset(request()->property)) { 
                 $property    = request()->property;
             } else {
                 $property    = null;

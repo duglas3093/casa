@@ -273,6 +273,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
 		Route::match(array('GET', 'POST'), 'settings/payment-methods', 'SettingsController@paymentMethods')->middleware(['permission:payment_settings']);
 		Route::match(array('GET', 'POST'), 'settings/social-links', 'SettingsController@socialLinks')->middleware(['permission:social_links']);
 
+		// Route::resource('bank', 'BankController');
+		Route::get('bank', 'BankController@index');
+		Route::match(array('GET', 'POST'), 'add-bank', 'BankController@add');
+		Route::match(array('GET', 'POST'), 'edit-bank/{id}', 'BankController@update');
+		// Route::get('properties/property_list_csv', 'BankController@propertyCsv');
+		// Route::get('properties/property_list_pdf', 'BankController@propertyPdf');
+
 		Route::group(['middleware' => 'permission:manage_roles'], function () {
 			Route::get('settings/roles', 'RolesController@index');
 			Route::match(array('GET', 'POST'), 'settings/add-role', 'RolesController@add');
