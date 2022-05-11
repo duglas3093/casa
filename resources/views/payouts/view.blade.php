@@ -63,9 +63,16 @@
 
                         <div class="col-md-9">
 						<div class="col-md-12">
+							@if(count($payouts) < 2)
 							<button type="button" class="btn vbtn-outline-success text-14 font-weight-700 pl-4 pr-4 pt-3 pb-3 mt-4" data-toggle="modal" data-target=".bd-example-modal-lg">
 								<i class="fa fa-plus"></i> {{trans('messages.utility.payment_method')}}
 							</button>
+							@else
+							<button id="add_payment_method" type="button" class="btn vbtn-outline-success text-14 font-weight-700 pl-4 pr-4 pt-3 pb-3 mt-4" title="Solo puede tener 2 cuentas bancarias" >
+								<i class="fa fa-plus"></i> {{trans('messages.utility.payment_method')}}
+							</button>
+							<span id="message_no_payment_method" style="display:none; color:red;">{{trans('messages.utility.message_no_payment_method')}}</span>
+							@endif
 						</div>
 					
 					@if($payouts->count() >0 )
@@ -184,7 +191,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h2 class="modal-title" id="exampleModalLongTitle">{{trans('messages.utility.payment_method')}}</h2>
+				<h2 class="modal-title" id="exampleModalLongTitle">{{trans('messages.utility.payment_method')}} ( {{trans('messages.utility.maximum_two_accounts')}} )</h2>
 				<button type="button" class="close text-28" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -198,8 +205,8 @@
 						<div class="form-group">
 							<label for="exampleInputPassword1">{{trans('messages.account_preference.payout_method')}}</label>
 							<select class="form-control" name="payout_type" id="payout_type">
-								<option value="4">Bank</option>
-								<option value="1">Paypal</option>
+								<option value="4">Banco</option>
+								{{-- <option value="1">Paypal</option> --}}
 							</select>
 						</div>
 					</div>
@@ -207,7 +214,12 @@
 					<div class="col-md-6" id="bank">
 						<div class="form-group">
 							<label for="exampleInputPassword1">{{trans('messages.account_preference.bank_name')}}<span class="text-danger">*</span></label>
-							<input type="text" class="form-control" name="bank_name" id="bank_name" value="">
+							<select name="bank_name" id="bank_name" class="form-control">
+								@foreach($banks as $bank)
+								<option value="{{ $bank->name }}">{{ $bank->initials }} - {{ $bank->name }}</option>
+								@endforeach
+							</select>
+							{{-- <input type="text" class="form-control" name="bank_name" id="bank_name" value=""> --}}
 							@if ($errors->has('bank_name')) 
 							<p class="error-tag">{{ $errors->first('bank_name') }}</p> 
 							@endif
@@ -226,7 +238,7 @@
 
 					<div class="col-md-6" id="branch">
 						<div class="form-group">
-							<label for="exampleInputPassword1">{{trans('messages.account_preference.branch_name')}}<span class="text-danger">*</span></label>
+							<label for="exampleInputPassword1">C.I.<span class="text-danger">*</span></label>
 							<input type="text" class="form-control" name="branch_name" id="branch_name" value="">
 							@if ($errors->has('branch_name')) <p class="error-tag">{{ $errors->first('branch_name') }}</p> 
 							@endif
@@ -253,7 +265,7 @@
 						</div>
 					</div>
 
-					<div class="col-md-6" id="swift">
+					{{-- <div class="col-md-6" id="swift">
 						<div class="form-group">
 							<label for="exampleInputPassword1">{{trans('messages.account_preference.swift_code')}}<span class="text-danger">*</span></label>
 							<input type="text" class="form-control" name="swift_code" id="swift_code" value="">
@@ -261,9 +273,9 @@
 							<p class="error-tag">{{ $errors->first('swift_code') }}</p> 
 							@endif
 						</div>
-					</div>
+					</div> --}}
 
-					<div class="col-md-6" id="branch_ad">
+					{{-- <div class="col-md-6" id="branch_ad">
 						<div class="form-group">
 							<label for="exampleInputPassword1">{{trans('messages.account_preference.branch_address')}} <span class="text-danger">*</span></label>
 							<input type="text" class="form-control" name="branch_address" id="branch_address" value="">
@@ -271,10 +283,10 @@
 							<p class="error-tag">{{ $errors->first('branch_address') }}</p> 
 							@endif
 						</div>
-					</div>
+					</div> --}}
 
 					
-
+{{-- 
 					<div class="col-md-6" id="country_id">
 						<div class="form-group">
 							<label for="exampleInputPassword1" class="control-label col-sm-3">{{trans('messages.payment.country')}}</label>
@@ -284,7 +296,7 @@
 								@endforeach
 							</select>
 						</div>
-					</div>
+					</div> --}}
 
 					<div class="col-md-6 d-none" id="email_id">
 						<div class="form-group">
@@ -333,7 +345,12 @@
 					<div class="col-md-6" id="bank">
 						<div class="form-group">
 							<label for="exampleInputPassword1">{{trans('messages.account_preference.bank_name')}}<span class="text-danger">*</span></label>
-							<input type="text" class="form-control" name="bank_name" id="edit_bank_name" value="">
+							<select name="bank_name" id="edit_bank_name" class="form-control">
+								@foreach($banks as $bank)
+								<option value="{{ $bank->name }}">{{ $bank->initials }} - {{ $bank->name }}</option>
+								@endforeach
+							</select>
+							{{-- <input type="text" class="form-control" name="bank_name" id="edit_bank_name" value=""> --}}
 							@if ($errors->has('bank_name')) 
 							<p class="error-tag">{{ $errors->first('bank_name') }}</p> 
 							@endif
@@ -371,7 +388,7 @@
 
 					<div class="col-md-6" id="branch_c">
 						<div class="form-group">
-							<label for="exampleInputPassword1">{{trans('messages.account_preference.branch_name')}}<span class="text-danger">*</span></label>
+							<label for="exampleInputPassword1">{{trans('messages.account_preference.branch_city')}}<span class="text-danger">*</span></label>
 							<input type="text" class="form-control" name="branch_city" id="edit_branch_city" value="">
 							@if ($errors->has('branch_city')) 
 							<p class="error-tag">{{ $errors->first('branch_city') }}</p> 
@@ -381,7 +398,7 @@
 
 					
 
-					
+{{-- 					
 
 					<div class="col-md-6" id="swift">
 						<div class="form-group">
@@ -402,9 +419,7 @@
 							@endif
 						</div>
 					</div>
-
 					
-
 					<div class="col-md-6" id="country_id">
 						<div class="form-group">
 							<label for="exampleInputPassword1">{{trans('messages.payment.country')}}</label>
@@ -414,7 +429,7 @@
 								@endforeach
 							</select>
 						</div>
-					</div>
+					</div> --}}
 				</div>
 
 				<div class="modal-footer p-4">
@@ -649,7 +664,6 @@
 					bank_name: {
 						required: true,
 						maxlength: 255,
-						minlength: 5,
 
 					}
 				},
@@ -694,7 +708,12 @@
 	            }
 			});
 		});
+
+		$(document).on('click', '#add_payment_method',() => {
+			$('#message_no_payment_method').css('display', 'block');
+		});
 	});
+
 </script>
 @endpush
 
