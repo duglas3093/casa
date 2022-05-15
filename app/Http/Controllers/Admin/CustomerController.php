@@ -50,7 +50,8 @@ use App\Models\{
     Settings,
     Accounts,
     Country,
-    Bookings
+    Bookings,
+    PayoutSetting,
 };
 
 
@@ -338,8 +339,8 @@ class CustomerController extends Controller
     {
         $data['payment_methods_tab'] = 'active';
         $data['user'] = DB::table('users')->where('id',$id)->first();
-
-        $data['payouts']  = Accounts::where('user_id', $id)->orderBy('id','desc')->get();
+        $data['payouts'] = PayoutSetting::with('payment_methods')->where(['user_id' => $id])->paginate(Session::get('row_per_page'));
+        // $data['payouts']  = Accounts::where('user_id', $id)->orderBy('id','desc')->get();
         $data['country']  = Country::all()->pluck('name','short_name');
 
         return view('admin.customerdetails.payment_methods', $data);

@@ -19,15 +19,18 @@
 										<div class="table-responsive">
 											<table class="table table-striped" id="payout_methods">
 												@if(count($payouts))
-													<thead>
+													<thead >
 														<tr class="text-truncate">
-															<th>Methods</th>
-															<th>Details/Account</th>
-															<th>Status</th>
+															<th class="text-center" style="color: #898d93 !important;">{{trans('messages.utility.payment_method')}}</th>
+															<th class="text-center" style="color: #898d93 !important;">{{ trans('messages.utility.headline') }}</th>
+															<th class="text-center" style="color: #898d93 !important;">{{trans('messages.utility.payment_details')}}</th>
+															<th class="text-center" style="color: #898d93 !important;">{{ trans('messages.account_preference.branch_city') }}</th>
+															<th class="text-center" style="color: #898d93 !important;">{{trans('messages.utility.payment_status')}}</th>
 														</tr>
 													</thead>
 
 													<tbody>
+														{{-- <?php var_dump($payouts); ?>
 														@foreach($payouts as $row)
 															<tr>
 																<td>
@@ -44,6 +47,25 @@
 																<td>
 																	{{"Ready"}}
 																</td>
+															</tr>
+														@endforeach --}}
+														@foreach($payouts as $key=>$payout)
+															<tr>
+																<td>{{ $payout->payment_methods->name}}</td>
+																<td>
+																	{{$payout->account_name}}<br>
+																	{{ $payout->bank_branch_name }}
+																</td>
+																<td>
+																	@if($payout->payment_methods->name!="Bank")
+																		{{$payout->email }}
+																	@else
+																		({{$payout->account_number}})<br/>
+																		{{$payout->bank_name}}
+																	@endif
+																</td>
+																<td>{{ $payout->bank_branch_city }}</td>
+																<td>{{ $payout->payment_methods->status}}</td>
 															</tr>
 														@endforeach
 													</tbody>

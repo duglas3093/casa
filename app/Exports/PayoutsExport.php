@@ -51,7 +51,7 @@ class PayoutsExport implements FromArray,WithHeadings,ShouldAutoSize
                 $data[$key]['Status']          = $value->status;
                 $data[$key]['Date']            = dateFormat($value->created_at);
             }
-        }
+        } 
         return $data;
     }
 

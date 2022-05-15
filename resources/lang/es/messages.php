@@ -806,7 +806,9 @@ return [
         'payment_status'       =>'Estado',
         'payment_action'       =>'Acción',
         'maximum_two_accounts' =>'Maximo dos cuentas',
-        'message_no_payment_methods' => 'Solo es posible tener 2 metodos de pago.',
+        'message_no_payment_method' => 'Solo es posible tener 2 metodos de pago.',
+        'headline' => 'Titular',
+        
     ],
 
     'feeds' => [

@@ -794,7 +794,8 @@ return [
         'payment_details'       =>'Payment Details',
         'payment_status'       =>'Status',
         'payment_action'       =>'Action',
-
+        'message_no_payment_method' => 'It is only possible to have 2 payment methods.',
+        'headline' => 'Headline',
     ],
 
     'feeds' => [

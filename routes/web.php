@@ -81,7 +81,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
 
 		Route::post('customer/bookings/property_search', 'BookingsController@searchProperty');
 		Route::get('customer/payouts/{id}', 'CustomerController@customerPayouts');
-		Route::get('customer/payment-methods/{id}', 'CustomerController@paymentMethods');
+		Route::get('customer/payment-methods/{id}', 'CustomerController@paymentMethods');   
 		Route::get('customer/wallet/{id}', 'CustomerController@customerWallet');
 
 		Route::get('customer/properties/{id}/property_list_csv', 'PropertiesController@propertyCsv');

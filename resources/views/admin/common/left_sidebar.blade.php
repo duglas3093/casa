@@ -208,6 +208,11 @@
         					<a href="{{ url('admin/settings/fees') }}">Fees & Tax Settings</a>
         				</li>
 			        @endif
+			        @if(Helpers::has_permission(Auth::guard('admin')->user()->id, 'manage_fees'))
+        				<li class="{{ (Route::current()->uri() == 'admin/bank/') ? 'active' : ''  }}">
+        					<a href="{{ url('admin/bank') }}">Banks</a>
+        				</li>
+			        @endif
 				</ul>
 			</li>
 			<li class="treeview {{ (Route::current()->uri() == 'admin/settings/email' || Route::current()->uri() == 'admin/email-template/{id}') ? 'active' : ''  }}">
