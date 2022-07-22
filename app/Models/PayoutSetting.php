@@ -13,6 +13,11 @@ class PayoutSetting extends Model
     	return $this->hasMany('App\Models\Withdrawal', 'id', 'payout_id');
     }
 
+    public function status()
+    {
+    	return $this->hasMany('App\Models\Status', 'id', 'id');
+    }
+
     public function payment_methods(){
 
     	return $this->belongsTo('App\Models\PaymentMethods', 'type', 'id');

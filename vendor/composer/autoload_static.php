@@ -239,9 +239,9 @@ class ComposerStaticInit67037621e41fb49cb59011d37dc168b6
         ),
         'Yajra\\DataTables\\' => 
         array (
-            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
             1 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
-            2 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
+            2 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
         ),
         'Whoops\\' => 
         array (
@@ -523,8 +523,8 @@ class ComposerStaticInit67037621e41fb49cb59011d37dc168b6
         ),
         'Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/php-http/message-factory/src',
-            1 => __DIR__ . '/..' . '/php-http/message/src',
+            0 => __DIR__ . '/..' . '/php-http/message/src',
+            1 => __DIR__ . '/..' . '/php-http/message-factory/src',
         ),
         'Http\\Discovery\\' => 
         array (
@@ -679,6 +679,7 @@ class ComposerStaticInit67037621e41fb49cb59011d37dc168b6
         'App\\DataTables\\AmenitiesDataTable' => __DIR__ . '/../..' . '/app/DataTables/AmenitiesDataTable.php',
         'App\\DataTables\\AmenityTypeDataTable' => __DIR__ . '/../..' . '/app/DataTables/AmenityTypeDataTable.php',
         'App\\DataTables\\BackupsDataTable' => __DIR__ . '/../..' . '/app/DataTables/BackupsDataTable.php',
+        'App\\DataTables\\BanksDataTable' => __DIR__ . '/../..' . '/app/DataTables/BanksDataTable.php',
         'App\\DataTables\\BannersDataTable' => __DIR__ . '/../..' . '/app/DataTables/BannersDataTable.php',
         'App\\DataTables\\BedTypeDataTable' => __DIR__ . '/../..' . '/app/DataTables/BedTypeDataTable.php',
         'App\\DataTables\\BookingsDataTable' => __DIR__ . '/../..' . '/app/DataTables/BookingsDataTable.php',
@@ -720,6 +721,7 @@ class ComposerStaticInit67037621e41fb49cb59011d37dc168b6
         'App\\Http\\Controllers\\Admin\\AmenitiesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AmenitiesController.php',
         'App\\Http\\Controllers\\Admin\\AmenitiesTypeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AmenitiesTypeController.php',
         'App\\Http\\Controllers\\Admin\\BackupController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/BackupController.php',
+        'App\\Http\\Controllers\\Admin\\BankController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/BankController.php',
         'App\\Http\\Controllers\\Admin\\BannersController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/BannersController.php',
         'App\\Http\\Controllers\\Admin\\BedTypeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/BedTypeController.php',
         'App\\Http\\Controllers\\Admin\\BookingsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/BookingsController.php',
@@ -789,6 +791,7 @@ class ComposerStaticInit67037621e41fb49cb59011d37dc168b6
         'App\\Models\\Amenities' => __DIR__ . '/../..' . '/app/Models/Amenities.php',
         'App\\Models\\AmenityType' => __DIR__ . '/../..' . '/app/Models/AmenityType.php',
         'App\\Models\\Backup' => __DIR__ . '/../..' . '/app/Models/Backup.php',
+        'App\\Models\\Bank' => __DIR__ . '/../..' . '/app/Models/Bank.php',
         'App\\Models\\Banners' => __DIR__ . '/../..' . '/app/Models/Banners.php',
         'App\\Models\\BedType' => __DIR__ . '/../..' . '/app/Models/BedType.php',
         'App\\Models\\BookingDetails' => __DIR__ . '/../..' . '/app/Models/BookingDetails.php',

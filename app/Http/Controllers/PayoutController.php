@@ -9,6 +9,7 @@ use App\Http\Helpers\Common;
 use App\Models\{
     Settings,
     Country,
+    Status,
     PayoutSetting,
     Withdrawal,
     Wallet,
@@ -121,6 +122,8 @@ class PayoutController extends Controller
                     $payoutSetting->bank_branch_name    = $request->branch_name;
                     $payoutSetting->bank_branch_city    = $request->branch_city;
                     $payoutSetting->bank_name           = $request->bank_name;
+                    $payoutSetting->status              = 'Inactive';// 2 inactive
+                    
                     // $payoutSetting->swift_code          = $request->swift_code;
                     // $payoutSetting->bank_branch_address = $request->branch_address;
                     // $payoutSetting->country             = $request->country;
@@ -210,6 +213,7 @@ class PayoutController extends Controller
                     $payoutSetting->bank_branch_address = $request->branch_address;
                     $payoutSetting->bank_name           = $request->bank_name;
                     $payoutSetting->country             = $request->country;
+                    $payoutSetting->status             = 'Inactive';
                     $payoutSetting->save();
 
                     $this->helper->one_time_message('success', "Updated Successfully");
@@ -219,20 +223,30 @@ class PayoutController extends Controller
         }
     }
 
-     public function delete(Request $request)
-     {
+    public function switchToReview(Request $request){
+        if ($request->isMethod('post')){    
+            $payoutSetting          = PayoutSetting::find($request->id);
+            $payoutSetting->status  = 'Revision';
+            $payoutSetting->save();
+
+            $this->helper->one_time_message('warning', "The state passed to review.");
+            return redirect('users/payout');
+        }
+    }
+
+    public function delete(Request $request){
         $withdrawal = Withdrawal::where(['payout_id' => $request->id])->get()->toArray();
         if (env('APP_MODE', '') != 'test') {
             if (count($withdrawal) > 0) {
-              $this->helper->one_time_message('danger', 'This Account has Payouts Request. Sorry can not possible to delete');
+                $this->helper->one_time_message('danger', 'This Account has Payouts Request. Sorry can not possible to delete');
             } else {
-              PayoutSetting::find($request->id)->delete();
+                PayoutSetting::find($request->id)->delete();
                 $this->helper->one_time_message('success', trans('messages.success.delete_success'));
                 return redirect('users/payout');
             }                    
         }
-          return redirect('users/payout');  
-      }
+        return redirect('users/payout');  
+    }
 
     public function payoutList(PayoutListDataTable $dataTable) 
     {
@@ -241,7 +255,7 @@ class PayoutController extends Controller
         $data['to']   = isset(request()->to) ? request()->to : null;
     		
         $data['walletBalance'] = Wallet::where(['user_id' => Auth::user()->id])->first(); 
-        $data['payouts'] = PayoutSetting::where(['user_id' => Auth::user()->id])->get();
+        $data['payouts'] = PayoutSetting::where(['user_id' => Auth::user()->id])->where(['status' => "Active"])->get();
 
         return $dataTable->render('payoutlists.view',$data);
     }

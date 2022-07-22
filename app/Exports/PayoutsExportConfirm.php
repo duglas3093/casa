@@ -4,14 +4,16 @@ namespace App\Exports;
 
 use App\Models\Payouts;
 use App\Models\User;
-use App\Models\Payout_settings;
+use App\Models\PayoutSetting;
 use App\Models\Withdrawal;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class PayoutsExport implements FromArray,WithHeadings,ShouldAutoSize
+use Illuminate\Support\Facades\DB;
+
+class PayoutsExportConfirm implements FromArray,WithHeadings,ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -24,36 +26,34 @@ class PayoutsExport implements FromArray,WithHeadings,ShouldAutoSize
         $types              = isset(request()->types) ? request()->types : null;
         $property           = isset(request()->types) ? request()->types : null;
 
-        $query = Withdrawal::orderBy('users.id', 'desc')->select();
+        $query = PayoutSetting::orderBy('users.id', 'desc')->select();
         // $query = User::orderBy('id', 'desc')->select();
-        $query->leftJoin('users','withdrawals.user_id','=','users.id');
-        $query->leftJoin('payout_settings','users.id','=','payout_settings.user_id');
+        $query->leftJoin('users','payout_settings.user_id','=','users.id');
+        // $query->leftJoin('payout_settings','users.id','=','payout_settings.user_id');
         if ($from) {
-        $query->whereDate('withdrawals.created_at', '>=', $from);
+            // $query->whereDate('withdrawals.created_at', '>=', $from);
         }
 
         if ($to) {
-            $query->whereDate('withdrawals.created_at', '<=', $to);
+            // $query->whereDate('withdrawals.created_at', '<=', $to);
         }
+        $query->where('payout_settings.status', '=', 'Revision');
 
-        if ($status) {
-            $query->where('withdrawals.status', '=', $status);
-        }
-
+        // // if ($status) {
+        // //     // $query->where('withdrawals.status', '=', $status);
+        // }
 
         $data = [];
         $account_type = "Cuenta Corriente";
         $payoutsList = $query->get();
-        
+        // var_dump($payoutsList);
         if ($payoutsList->count()) {
             foreach ($payoutsList as $key => $value) {
-                $data[$key]['Bank']            = $value->bank_name;
                 $data[$key]['User']            = $value->first_name." ".$value->last_name;
-                $data[$key]['Document']        = $value->bank_branch_name;
-                $data[$key]['Account Type']    = $account_type;
+                $data[$key]['Account Name']    = $value->account_name;
+                $data[$key]['CI']              = $value->bank_branch_name;
                 $data[$key]['Account Number']  = $value->account_number;
-                $data[$key]['Amount']          = isset($value->amount) ? "{$value->amount}" : "Datos no disponible";
-                // $data[$key]['Status']          = $value->status;
+                $data[$key]['Bank Name']       = $value->bank_name;
                 $data[$key]['Date']            = dateFormat($value->created_at);
             }
         } 
@@ -63,13 +63,11 @@ class PayoutsExport implements FromArray,WithHeadings,ShouldAutoSize
     public function headings(): array
     {
         return [
-            'Bank',
             'User',
+            'Account Holder',
             'Document CI',
-            'Account Type',
             'Account Number',
-            'Amount in Bs',
-            // 'Status',
+            'Bank',
             'Date'
         ];
     }

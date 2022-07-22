@@ -30,25 +30,6 @@
 													</thead>
 
 													<tbody>
-														{{-- <?php var_dump($payouts); ?>
-														@foreach($payouts as $row)
-															<tr>
-																<td>
-																	{{ $row->payment_methods->name }} 
-																	@if($row->selected == 'Yes')
-																	<span class="label label-info">Default</span>
-																	@endif
-																</td>
-
-																<td>
-																	{{ $row->account }} ({{ $row->currency_code }})
-																</td>
-																
-																<td>
-																	{{"Ready"}}
-																</td>
-															</tr>
-														@endforeach --}}
 														@foreach($payouts as $key=>$payout)
 															<tr>
 																<td>{{ $payout->payment_methods->name}}</td>

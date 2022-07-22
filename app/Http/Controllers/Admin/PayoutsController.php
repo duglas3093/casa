@@ -22,12 +22,15 @@ namespace App\Http\Controllers\Admin;
 
 use PDF;
 use Validator;
-use DB;
+// use DB;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\DataTables\PayoutsDataTable;
+use App\DataTables\PayoutsSetingsAdminDataTable;
 use App\Exports\PayoutsExport;
+use App\Exports\PayoutsExportConfirm;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Helpers\Common;
 
@@ -38,7 +41,8 @@ use App\Models\{
     Properties,
     Currency,
     Wallet,
-    PaymentMethods
+    PaymentMethods,
+    PayoutSetting
 };
 
 
@@ -193,7 +197,7 @@ class PayoutsController extends Controller
         return $different_total_amounts;
     }
 
-    public function payoutsPdf($id = null)
+    public function payoutsPdf()
     {
         $to                 = setDateForDb(request()->to);
         $from               = setDateForDb(request()->from);
@@ -226,7 +230,7 @@ class PayoutsController extends Controller
         
         $data['payoutList'] = $query->get();
         $pdf = PDF::loadView('admin.payouts.list_pdf', $data, [], [
-            'format' => 'A3', [750, 1060]
+            'format' => 'A4', [750, 1060]
           ]);
         return $pdf->download('payouts_list_' . time() . '.pdf', array("Attachment" => 0));
     }
@@ -271,5 +275,47 @@ class PayoutsController extends Controller
         ->orderBy('payouts.id', 'desc');
 
         return $allPayouts;
+    }
+
+    public function accountVerificaction(PayoutsSetingsAdminDataTable $dataTable ){
+        $data['payouts'] = DB::table('payout_settings')->where('status', 'Revision')->get();
+        if (isset(request()->reset_btn)) {
+            $data['from']        = null;
+            $data['to']          = null;
+            $data['allstatus']   = '';
+            $data['alltypes']   = '';
+            $data['allproperties']   = '';
+            return $dataTable->render('admin.payouts.confirm', $data);
+        }
+        return $dataTable->render('admin.payouts.confirm', $data);
+    }
+
+    public function approvedAccount($id, PayoutsSetingsAdminDataTable $dataTable){
+        $data['payouts'] = DB::table('payout_settings')->where('status', 'Revision')->get();
+        $payouts = PayoutSetting::where('id', $id)->first();
+        if(isset($payouts)){
+            $payouts->status   = "Active";
+            $payouts->save();
+        }
+        // return $dataTable->render('admin.payouts.confirm', $data);
+        return redirect()->route('accountVerificaction');
+        // $this->accountVerificaction();
+    }
+
+    public function rejectAccount($id, PayoutsSetingsAdminDataTable $dataTable){
+        $data['payouts'] = DB::table('payout_settings')->where('status', 'Revision')->get();
+        $payouts = PayoutSetting::where('id', $id)->first();
+        if(isset($payouts)){
+            $payouts->status   = "Inactive";
+            $payouts->save();
+        }
+        // return $dataTable->render('admin.payouts.confirm', $data);
+        return redirect()->route('accountVerificaction');
+        // $this->accountVerificaction();
+    }
+
+//     payoutsConfirmPdf
+    public function payoutsConfirmCsv(){
+        return Excel::download(new PayoutsExportConfirm, 'payouts_sheet' . time() .'.xls');
     }
 }

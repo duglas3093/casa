@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class BannersTableSeeder extends Seeder
 {
@@ -14,7 +15,10 @@ class BannersTableSeeder extends Seeder
         DB::table('banners')->truncate();
 
         DB::table('banners')->insert([
-        		['heading' => 'Welcome to Hotel', 'subheading' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'image' => 'banner_1.jpg'],
+        		[
+                'heading' => 'Welcome to Hotel', 
+                'subheading' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit', 
+                'image' => 'banner_1.jpg'],
         	]);
     }
 }

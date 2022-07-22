@@ -72,6 +72,10 @@
 		@endif
 
 		@if(Helpers::has_permission(Auth::guard('admin')->user()->id, 'view_payouts'))
+			<li class="{{ (Route::current()->uri() == 'admin/payouts/account-verificaction') || (Route::current()->uri() == 'admin/payouts/edit/{id}') ? 'active' : ''  }}"><a href="{{ url('admin/payouts/account-verificaction') }}"><i class="fa fa-credit-card" aria-hidden="true"></i><span>New Accounts</span></a></li>
+		@endif
+
+		@if(Helpers::has_permission(Auth::guard('admin')->user()->id, 'view_payouts'))
 			<li class="{{ (Route::current()->uri() == 'admin/payouts') || (Route::current()->uri() == 'admin/payouts/details/{id}') || (Route::current()->uri() == 'admin/payouts/edit/{id}') ? 'active' : ''  }}"><a href="{{ url('admin/payouts') }}"><i class="fa fa-credit-card-alt"></i><span>Payout Requests</span></a></li>
 		@endif
 		

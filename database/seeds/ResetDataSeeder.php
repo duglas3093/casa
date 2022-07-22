@@ -5,6 +5,8 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Models\RoleAdmin;
 use App\Models\PermissionRole;
+use Illuminate\Support\Facades\DB;
+
 class ResetDataSeeder extends Seeder
 {
 

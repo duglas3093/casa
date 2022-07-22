@@ -95,15 +95,24 @@
 						            	@if($payout->payment_methods->name!="Bank")
 											{{$payout->account_name}}<br/>
 											{{$payout->email }}
-											@else
+										@else
 											{{$payout->account_name}}
 											(*****{{substr($payout->account_number,-4)}})<br/>
 											{{$payout->bank_name}}
-											@endif
+										@endif
 								</td>
-						        <td>{{ $payout->payment_methods->status}}</td>
+						        <td>{{ $payout->status}}</td>
 						        <td>
-						            	<form action="{{ url('users/payout/delete-payout/'.$payout->id) }}" method="post" id="delete-payout-form">
+									<div style="display: left;">
+										<?php $inactive = "Inactive"; ?>
+										@if($payout->status == $inactive)
+										<form action="{{ url('users/payout/confirm-payout/'.$payout->id) }}" method="post" id="confirm-payout-form" style="display:inline;">
+											{{ csrf_field() }}
+											<input type="hidden" name="id" value="{{ $payout->id }}">
+											<a class="verify_account-confirm" data-name="{{ $payout->payment_methods->name}}" title="{{trans('messages.utility.verify_account')}}"><i class="fas fa-clipboard-check secondary-text-color"></i></a>
+										</form>
+										@endif
+										<form action="{{ url('users/payout/delete-payout/'.$payout->id) }}" method="post" id="delete-payout-form" style="display:inline;">
 											{{ csrf_field() }}
 											@if($payout->type == 4)
 											<a class="p-2 editmodal" data-toggle="modal" data-id="{{ $payout->id }}"  data-target=".edit-modal" data-obj="{{json_encode($payout->getAttributes())}}"><i class="fas fa-edit secondary-text-color"></i></a>
@@ -113,6 +122,7 @@
 											<input type="hidden" name="id" value="{{ $payout->id }}">
 											<a class="delete-confirm" data-name="{{ $payout->payment_methods->name}}"><i class="fas fa-trash text-danger" ></i></a>
 										</form>
+									</div>
 						        </td>
 						    </tr>
 						    
@@ -528,6 +538,40 @@
 		});
 	});
 
+	$('.verify_account-confirm').on("click", function(event) {
+		var form =  $(this).closest("form");
+		var name = $(this).data("name");
+		// console.log(name);
+		event.preventDefault();
+		swal({
+			title: "{{trans('messages.modal.are_you_sure')}}",
+			text: "{{trans('messages.modal.confirm_message')}}",
+			icon: "warning",
+			buttons: {
+				cancel: {
+				    text: "{{trans('messages.search.cancel')}}",
+				    value: null,
+				    visible: true,
+				    className: "btn btn-outline-danger text-16 font-weight-700  pt-3 pb-3 pl-5 pr-5",
+				    closeModal: true,
+				},
+				confirm: {
+				    text: "{{trans('messages.modal.ok')}}",
+				    value: true,
+				    visible: true,
+				    className: "btn vbtn-outline-success text-16 font-weight-700 pl-5 pr-5 pt-3 pb-3 pl-5 pr-5",
+				    closeModal: true
+				}
+			},
+			dangerMode: true,
+		})
+		.then((willDelete) => {
+			if (willDelete) {
+				$("#confirm-payout-form").trigger("submit");
+			}
+		});
+	});
+
 
 	$(document).ready(function() {
 
@@ -713,7 +757,6 @@
 			$('#message_no_payment_method').css('display', 'block');
 		});
 	});
-
 </script>
 @endpush
 

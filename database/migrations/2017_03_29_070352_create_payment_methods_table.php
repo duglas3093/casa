@@ -16,9 +16,9 @@ class CreatePaymentMethodsTable extends Migration
         Schema::dropIfExists('payment_methods');
         
         Schema::create('payment_methods', function (Blueprint $table) {
-             $table->increments('id');
-             $table->string('name', 50);
-             $table->enum('status',['Active', 'Inactive'])->default('Active');            
+            $table->increments('id');
+            $table->string('name', 50);
+            $table->enum('status',['Active', 'Revition','Inactive'])->default('Inactive');            
         });
     }
 

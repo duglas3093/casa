@@ -145,6 +145,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
 	Route::get('payouts', 'PayoutsController@index')->middleware(['permission:view_payouts']);
 	Route::match(array('GET', 'POST'), 'payouts/edit/{id}', 'PayoutsController@edit');
 	Route::get('payouts/details/{id}', 'PayoutsController@details');
+	Route::get('payouts/account-verificaction', 'PayoutsController@accountVerificaction')->name('accountVerificaction');
+	Route::get('payouts/approved-account/{id}', 'PayoutsController@approvedAccount');
+	Route::get('payouts/reject-account/{id}', 'PayoutsController@rejectAccount');
+	Route::get('payouts/payouts_confirm_list_pdf', 'PayoutsController@payoutsConfirmPdf');
+	Route::get('payouts/payouts_confirm_list_csv', 'PayoutsController@payoutsConfirmCsv');
 	Route::get('payouts/payouts_list_pdf', 'PayoutsController@payoutsPdf');
 	Route::get('payouts/payouts_list_csv', 'PayoutsController@payoutsCsv');
 	Route::group(['middleware' => 'permission:manage_reviews'], function () {
@@ -429,6 +434,8 @@ Route::group(['middleware' => ['guest:users', 'locale']], function () {
 	Route::match(['GET', 'POST'], 'users/payout/setting', 'PayoutController@setting'); 
 	Route::match(['GET', 'POST'], 'users/payout/edit-payout/', 'PayoutController@edit');
 	Route::match(['GET', 'POST'], 'users/payout/delete-payout/{id}', 'PayoutController@delete');
+	Route::match(['GET', 'POST'], 'users/payout/confirm-payout/{id}', 'PayoutController@switchToReview');
+	Route::match(['GET', 'POST'], 'users/payout/account-verification', 'PayoutController@accountVerificaction');
 
 	// for payout request
 	Route::match(['GET', 'POST'], 'users/payout-list', 'PayoutController@payoutList');  
