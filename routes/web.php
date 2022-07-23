@@ -285,6 +285,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
 		// Route::get('properties/property_list_csv', 'BankController@propertyCsv');
 		// Route::get('properties/property_list_pdf', 'BankController@propertyPdf');
 
+		Route::get('prices', 'PriceController@index');
+		Route::match(array('GET', 'POST'), 'add-price', 'PriceController@add');
+		Route::match(array('GET', 'POST'), 'edit-price/{id}', 'PriceController@update');
+
 		Route::group(['middleware' => 'permission:manage_roles'], function () {
 			Route::get('settings/roles', 'RolesController@index');
 			Route::match(array('GET', 'POST'), 'settings/add-role', 'RolesController@add');

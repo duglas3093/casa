@@ -207,6 +207,11 @@
         					<a href="{{ url('admin/settings/payment-methods') }}" data-group="payment_methods">Payment Methods</a>
         				</li>
 			        @endif
+					@if(Helpers::has_permission(Auth::guard('admin')->user()->id, 'payment_settings'))
+        				<li class="{{ (Route::current()->uri() == 'admin/prices') ? 'active' : ''  }}">
+        					<a href="{{ url('admin/prices') }}">Prices list</a>
+        				</li>
+			        @endif
 			        @if(Helpers::has_permission(Auth::guard('admin')->user()->id, 'manage_fees'))
         				<li class="{{ (Route::current()->uri() == 'admin/settings/fees') ? 'active' : ''  }}">
         					<a href="{{ url('admin/settings/fees') }}">Fees & Tax Settings</a>
