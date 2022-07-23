@@ -19,14 +19,14 @@
                         <div class="form-group col-md-12">
                             <label for="exampleInputPassword1" class="control-label col-sm-3">Initials <span class="text-danger">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="initials" id="initials" placeholder="">
+                                <input type="text" class="form-control" name="initials" id="initials" placeholder="" onKeyUp="upperCase(this);">
                             </div>
                         </div>
 
                         <div class="form-group col-md-12">
                             <label for="exampleInputPassword1" class="control-label col-sm-3">Name<span class="text-danger">*</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="name" id="name" placeholder="">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="" onKeyUp="upperCase(this);">
                             </div>
                         </div>
 
@@ -270,6 +270,10 @@
         } else {
             $('form').find("button[type='submit']").prop('disabled', true);
         }
+    }
+
+    function upperCase(e) {
+        e.value = e.value.toUpperCase();
     }
 </script>
 @endpush

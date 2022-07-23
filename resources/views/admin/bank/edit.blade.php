@@ -21,7 +21,7 @@
                             <div class="form-group">
                                 <label for="initials" class="control-label col-sm-3">Initials<span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" name="initials" id="initials" value="{{ $bank->initials }}" placeholder="">
+                                    <input type="text" class="form-control" name="initials" id="initials" value="{{ $bank->initials }}" placeholder="" onKeyUp="upperCase(this)">
                                     <span id="first_name-error" class="text-danger"></span>
                                 </div>
                             </div>
@@ -29,7 +29,7 @@
                             <div class="form-group">
                                 <label for="name" class="control-label col-sm-3">Name<span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" name="name" id="name" value="{{ $bank->name }}" placeholder="">
+                                    <input type="text" class="form-control" name="name" id="name" value="{{ $bank->name }}" placeholder="" onKeyUp="upperCase(this)">
                                     <span id="last_name-error" class="text-danger"></span>
                                 </div>
                             </div>
@@ -255,6 +255,10 @@
         } else {
             $('form').find("button[type='submit']").prop('disabled', true);
         }
+    }
+
+    function upperCase(e){
+        e.value = e.value.toUpperCase();
     }
     </script>
     @endpush
