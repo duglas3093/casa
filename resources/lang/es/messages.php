@@ -716,8 +716,10 @@ return [
         'country'                     =>'Pais',
         'payment_type'                =>'Tipo de Pago',
         'paypal'                      =>'PayPal',
+        'redenlace'                   =>'Red Enlace',
         'stripe'                      =>'Stripe',
         'redirect_to_paypal'          =>'redirigiendo a Paypal.',
+        'redirect_to_red_enlace'      =>'Redirigiendo a RED ENLACE.',
         'tell_about_trip'             =>'Comentanos acerca del viaje',
         'helful_trip_write'           =>'ayuda sobre el viaje',
         'what_bring_to'               =>'que te aporto el viaje?',
@@ -754,9 +756,18 @@ return [
     ],
 
     'payment_stripe'=>[
-       'credit_debit_card'       =>'Credito o Debito',
-       'submit_payment'          =>'Efectuar Pago',
-       
+        'credit_debit_card'       =>'Credito o Debito',
+        'submit_payment'          =>'Efectuar Pago',
+    ],
+    
+    'payment_red_enlace'=>[
+        'red_enlace_payment'      =>'Se recomienda cargar una captura de la transacción',
+        'redirect_red_enlace'     =>'Se redireccionará a Red Enlace',
+        'submit_payment'          =>'Efectuar Pago',
+    ],
+
+    'proof'=>[
+        'proof_of_payment'      =>'Comprobante de pago',
     ],
 
     'utility' => [

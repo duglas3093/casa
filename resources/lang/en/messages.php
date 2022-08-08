@@ -708,8 +708,10 @@ return [
         'payment_type'                =>'Payment type',
         'disable'                     =>'Payment types are disabled',
         'paypal'                      =>'PayPal',
+        'redenlace'                   =>'Red Enlace',
         'stripe'                      =>'Stripe',
         'redirect_to_paypal'          =>'You will be redirected to PayPal.',
+        'redirect_to_red_enlace'      =>'You will be redirected to RED ENLACE.',
         'tell_about_trip'             =>'Tell about your Trip',
         'helful_trip_write'           =>'Helpful tips on what to write',
         'what_bring_to'               =>'What brings you to',
@@ -745,9 +747,18 @@ return [
     ],
 
     'payment_stripe'=>[
-       'credit_debit_card'       =>'Credit or debit card',
-       'submit_payment'          =>'Submit Payment'
-       
+        'credit_debit_card'       =>'Credit or debit card',
+        'submit_payment'          =>'Submit Payment'       
+    ],
+    
+    'payment_red_enlace'=>[
+        'red_enlace_payment'      =>'It is recommended to upload a capture of the transaction',
+        'redirect_red_enlace'     =>'Redirected to Red Enlace',
+        'submit_payment'          =>'Make payment',
+    ],
+
+    'proof'=>[
+        'proof_of_payment'      =>'Proof of Payment',
     ],
 
     'utility' => [

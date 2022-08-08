@@ -354,14 +354,16 @@ class SettingsController extends Controller
     {
 
         if (! $request->isMethod('post')) {
-             $paypal = Settings::where('type', 'paypal')->get()->toArray();
-             $stripe = Settings::where('type', 'stripe')->get()->toArray();
-			 $razorpay = Settings::where('type', 'razorpay')->get()->toArray();
-             $data['paypal'] = $this->helper->key_value('name', 'value', $paypal);
-             $data['stripe'] = $this->helper->key_value('name', 'value', $stripe);
-			 $data['razorpay'] = $this->helper->key_value('name', 'value', $razorpay);
+            $paypal = Settings::where('type', 'paypal')->get()->toArray();
+            $stripe = Settings::where('type', 'stripe')->get()->toArray();
+            $razorpay = Settings::where('type', 'razorpay')->get()->toArray();
+            $redEnlace = Settings::where('type','redEnlace')->get()->toArray();
+            $data['paypal'] = $this->helper->key_value('name', 'value', $paypal);
+            $data['stripe'] = $this->helper->key_value('name', 'value', $stripe);
+            $data['razorpay'] = $this->helper->key_value('name', 'value', $razorpay);
+            $data['redEnlace'] = $this->helper->key_value('name', 'value', $redEnlace);
             
-             return view('admin.settings.payment', $data);
+            return view('admin.settings.payment', $data);
         } elseif ($request['gateway'] == 'paypal') {
             $rules = array(
                     'username'      => 'required',
@@ -480,6 +482,43 @@ class SettingsController extends Controller
                     $paymentSettings->name  = 'razorpay_status';
                     $paymentSettings->value = $request->razorpay_status;
                     $paymentSettings->type  = 'Razorpay';
+                    $paymentSettings->save();
+
+                    // Clear the settings cache
+                    Cache::forget('settings');
+                }
+
+                $data['message'] = 'Updated Successfully';
+                $data['success'] = 1;
+                echo json_encode($data);
+            }
+        }
+		elseif ($request['gateway'] == 'redenlace') {
+            $rules = array(
+                'redenlace_status'       => 'required',
+            );
+
+            $fieldNames = array(
+                'redenlace_status'     => 'Razorpay Status',
+            );
+
+            $validator = Validator::make($request->all(), $rules);
+            $validator->setAttributeNames($fieldNames);
+
+            if ($validator->fails()) {
+                $data['success'] = 0;
+                $data['errors'] = $validator->messages();
+                echo json_encode($data);
+            } else {
+                if (env('APP_MODE', '') != 'test') {
+                    // Settings::where(['name' => 'razorpay_key', 'type' => 'Razorpay'])->update(['value' => $request->razorpay_key]);
+                    // Settings::where(['name' => 'razorpay_secret', 'type' => 'Razorpay'])->update(['value' => $request->razorpay_secret]);
+
+                    $match                  = ['type'=>'redEnlace','name'=>'redenlace_status'];
+                    $paymentSettings        = Settings::firstOrNew($match);
+                    $paymentSettings->name  = 'redenlace_status';
+                    $paymentSettings->value = $request->razorpay_status;
+                    $paymentSettings->type  = 'redenlace';
                     $paymentSettings->save();
 
                     // Clear the settings cache

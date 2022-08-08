@@ -72,7 +72,8 @@ class BookingController extends Controller
 
         $data['stripe_status'] = Settings::where('name', 'stripe_status')
                                 ->where('type', 'Stripe')->first();
-
+        $data['redenlace_status'] = Settings::where('name', 'redenlace_status')
+                                ->where('type', 'redEnlace')->first();
         $data['booking_id']    = $request->id;
 
         $booking                  = Bookings::find($request->id);

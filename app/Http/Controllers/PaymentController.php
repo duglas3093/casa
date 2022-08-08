@@ -30,7 +30,8 @@ use App\Models\{
     BookingDetails,
     PropertyDates,
     PropertyPrice,
-    PropertyFees
+    PropertyFees,
+    Price
 };
 use Omnipay\Omnipay;
 use Illuminate\Http\Request;
@@ -205,37 +206,51 @@ class PaymentController extends Controller
         }
 		elseif ($request->payment_method == 'razorpay') {
 			
-		$id                       = Session::get('payment_property_id');
-        $data['result']           = Properties::find($id);
-        $data['property_id']      = $id;
+            $id                       = Session::get('payment_property_id');
+            $data['result']           = Properties::find($id);
+            $data['property_id']      = $id;
 
-        $checkin                  = Session::get('payment_checkin');
-        $checkout                 = Session::get('payment_checkout');
-        $number_of_guests         = Session::get('payment_number_of_guests');
-        $booking_type             = Session::get('payment_booking_type');
-		
-		$data['booking_id']    	= Session::get('payment_booking_id');
-		
+            $checkin                  = Session::get('payment_checkin');
+            $checkout                 = Session::get('payment_checkout');
+            $number_of_guests         = Session::get('payment_number_of_guests');
+            $booking_type             = Session::get('payment_booking_type');
+            
+            $data['booking_id']    	= Session::get('payment_booking_id');
+            
 
-        $data['checkin']          = setDateForDb($checkin);
-        $data['checkout']         = setDateForDb($checkout);
-        $data['number_of_guests'] = $number_of_guests;
-        $data['booking_type']     = $booking_type;
+            $data['checkin']          = setDateForDb($checkin);
+            $data['checkout']         = setDateForDb($checkout);
+            $data['number_of_guests'] = $number_of_guests;
+            $data['booking_type']     = $booking_type;
 
-        $from                     = new DateTime(setDateForDb($checkin));
-        $to                       = new DateTime(setDateForDb($checkout));
-        
-        $data['nights']           = $to->diff($from)->format("%a");
-        $data['price_list']       = Session::get('payment_price_list');
-        $data['currencyDefault']  = $currencyDefault = Currency::where('default', 1)->first();
-        $data['price_eur']        = $this->helper->convert_currency($data['result']->property_price->default_code, $currencyDefault->code, $data['price_list']->total);
+            $from                     = new DateTime(setDateForDb($checkin));
+            $to                       = new DateTime(setDateForDb($checkout));
+            
+            $data['nights']           = $to->diff($from)->format("%a");
+            $data['price_list']       = Session::get('payment_price_list');
+            $data['currencyDefault']  = $currencyDefault = Currency::where('default', 1)->first();
+            $data['price_eur']        = $this->helper->convert_currency($data['result']->property_price->default_code, $currencyDefault->code, $data['price_list']->total);
 
-        $data['price_rate']       = $this->helper->currency_rate($data['result']->property_price->currency_code, $currencyDefault->code);
+            $data['price_rate']       = $this->helper->currency_rate($data['result']->property_price->currency_code, $currencyDefault->code);
 
-        $razorpay                 = Settings::where('type', 'Razorpay')->pluck('value', 'name');
-        $data['razorpay_key']     =  $razorpay['razorpay_key'];
-        $data['title']            = 'Pay for your reservation';
-			return view('payment.razorpay',$data);
+            $razorpay                 = Settings::where('type', 'Razorpay')->pluck('value', 'name');
+            $data['razorpay_key']     =  $razorpay['razorpay_key'];
+            $data['title']            = 'Pay for your reservation';
+            return view('payment.razorpay',$data);
+        }
+        elseif($request->payment_method == 'red_enlace'){
+            $price = Price::where('amount', $price_list->total)->where('status','Active')->get();
+            if(!is_null($price)){ 
+                $price = json_decode($price);
+                $red_enlace_url = $price[0]->link;
+                // echo "<script>
+                //         window.location.href='$red_enlace_url';
+                //         window.open('$red_enlace_url', '_blank').focus();
+                //     </script>";
+                return redirect('payments/red-enlace');
+            }
+            
+            // redirect($price->link);
         } 
 		else {
             $data = [
@@ -298,6 +313,85 @@ class PaymentController extends Controller
         return view('payment.stripe', $data);
     }
 
+    public function redEnlacePayment(Request $request){
+        $id                       = Session::get('payment_property_id');
+        $data['result']           = Properties::find($id);
+        $data['property_id']      = $id;
+
+        $checkin                  = Session::get('payment_checkin');
+        $checkout                 = Session::get('payment_checkout');
+        $number_of_guests         = Session::get('payment_number_of_guests');
+        $booking_type             = Session::get('payment_booking_type');
+
+        $data['checkin']          = setDateForDb($checkin);
+        $data['checkout']         = setDateForDb($checkout);
+        $data['number_of_guests'] = $number_of_guests;
+        $data['booking_type']     = $booking_type;
+
+        $from                     = new DateTime(setDateForDb($checkin));
+        $to                       = new DateTime(setDateForDb($checkout));
+        
+        $data['nights']           = $to->diff($from)->format("%a");
+
+        $data['price_list']       = Session::get('payment_price_list');
+
+        $data['currencyDefault']  = $currencyDefault = Currency::where('default', 1)->first();
+
+        $data['price_eur']        = $this->helper->convert_currency($data['result']->property_price->default_code, $currencyDefault->code, $data['price_list']->total);
+
+        $data['price_rate']       = $this->helper->currency_rate($data['result']->property_price->currency_code, $currencyDefault->code);
+
+        $stripe                   = Settings::where('type', 'Stripe')->pluck('value', 'name');
+        $data['publishable']      = $stripe['publishable'];
+        $data['title']            = 'Pay for your reservation';
+        
+        $price = Price::where('amount', $data['price_list']->total)->where('status','Active')->get();
+        $price = json_decode($price);
+        $data['red_enlace_url'] = $price[0]->link;
+        
+        return view('payment.red_enlace', $data);
+    }
+
+    public function redEnlaceRequest(Request $request){
+        $currencyDefault = Currency::where('default', 1)->first();
+        if ($request->isMethod('post')) {
+            // if (isset($request->stripeToken)) {
+                $id            = Session::get('payment_property_id');
+                $result        = Properties::find($id);
+                $booking_id    = Session::get('payment_booking_id');
+                $booking_type  = Session::get('payment_booking_type');
+                $price_list    = Session::get('payment_price_list');
+                $price_eur     = $this->helper->convert_currency($result->property_price->code, $currencyDefault->code, $price_list->total);
+
+                if (true) {
+                    // $token = $response->getTransactionReference();
+                    $pm    = PaymentMethods::where('name', 'Red Enlace')->first();
+                    $data  = [
+                        'property_id'      => Session::get('payment_property_id'),
+                        'checkin'          => Session::get('payment_checkin'),
+                        'checkout'         => Session::get('payment_checkout'),
+                        'number_of_guests' => Session::get('payment_number_of_guests'),
+                        'transaction_id'   => "",
+                        'price_list'       => Session::get('payment_price_list'),
+                        'country'          => Session::get('payment_country'),
+                        'message_to_host'  => Session::get('message_to_host_'.Auth::user()->id),
+                        'payment_method_id'=> $pm->id,
+                        'paymode'          => 'Red Enlace',
+                        'booking_id'       => $booking_id,
+                        'booking_type'     => $booking_type
+                    ];
+
+                    if (isset($booking_id) && !empty($booking_id)) {
+                         $code = $this->update($data);
+                     }else{
+                        $code = $this->store($data);
+                    }
+
+                    $this->helper->one_time_message('success', trans('messages.success.payment_complete_success'));
+                    return redirect('booking/requested?code='.$code);
+                }
+        }
+    }
     public function stripeRequest(Request $request)
     {
         $currencyDefault = Currency::where('default', 1)->first();
@@ -320,7 +414,7 @@ class PaymentController extends Controller
                 $response = $gateway->purchase([
                     'amount' => $price_eur,
                     'currency' => $currencyDefault->code,
-                    'token' => $request->stripeToken,
+                    'token' => $request->stripeToken,8
                 ])->send();
                 
 
@@ -621,6 +715,9 @@ class PaymentController extends Controller
         $booking->transaction_id = $data['transaction_id'];
         $booking->payment_method_id = $data['payment_method_id'];
         $booking->code = $code;
+        if(isset($data['voucher'])){
+            $booking->voucher = $data['voucher'];
+        }
         $booking->save();
 
         $email_controller = new EmailController;

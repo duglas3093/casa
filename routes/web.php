@@ -409,7 +409,9 @@ Route::group(['middleware' => ['guest:users', 'locale']], function () {
     Route::get('payments/success', 'PaymentController@success');
     Route::get('payments/cancel', 'PaymentController@cancel');
     Route::get('payments/stripe', 'PaymentController@stripePayment');
+    Route::get('payments/red-enlace', 'PaymentController@redEnlacePayment');
     Route::post('payments/stripe-request', 'PaymentController@stripeRequest');
+    Route::post('payments/red_enlace-request', 'PaymentController@redEnlaceRequest');
     Route::get('booking/{id}', 'BookingController@index')->where('id', '[0-9]+');
     Route::get('booking_payment/{id}', 'BookingController@requestPayment')->where('id', '[0-9]+');
     Route::get('booking/requested', 'BookingController@requested');

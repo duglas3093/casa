@@ -2,7 +2,7 @@
 $form_data = [
 	'page_title'=> 'Payment Setting Form',
 	'page_subtitle'=> 'Payment Setting Page',
-	'tab_names' => ['paypal' => 'Paypal', 'stripe' => 'Stripe', 'razorpay' => 'Razorpay'],
+	'tab_names' => ['paypal' => 'Paypal', 'stripe' => 'Stripe', 'razorpay' => 'Razorpay','redEnlace' => 'Red Enlace'],
 	'tab_forms' => [
 		'paypal' => [
 			'action' => URL::to('/').'/admin/settings/payment-methods',
@@ -35,6 +35,15 @@ $form_data = [
 	      		['type' => 'text', 'class' => 'validate_field', 'label' => 'Razorpay Key', 'name' => 'razorpay_key', 'value' => $razorpay['razorpay_key']],
 	      		['type' => 'text', 'class' => 'validate_field', 'label' => 'Razorpay Secret', 'name' => 'razorpay_secret', 'value' => $razorpay['razorpay_secret']],
 	      		['type' => 'select', 'options' => ['0' => 'Inactive', '1' => 'Active'], 'class' => 'validate_field', 'label' => 'Razorpay Status', 'name' => 'razorpay_status', 'value' => $razorpay['razorpay_status']],
+			]
+		],
+		'redEnlace' => [
+			'action' => URL::to('/').'/admin/settings/payment-methods',
+			'form_class' => 'form-submit-jquery',
+			'form_id' => 'redenlace_form',
+			'fields' => [
+				['type' => 'hidden', 'class' => '', 'label' => '', 'id' =>'redenlace', 'name' => 'gateway', 'value' => 'redenlace'],
+	      		['type' => 'select', 'options' => ['0' => 'Inactive', '1' => 'Active'], 'class' => 'validate_field', 'label' => 'Red Enlace Status', 'name' => 'redenlace_status', 'value' => $redEnlace['redenlace_status']],
 			]
 		]
 	]

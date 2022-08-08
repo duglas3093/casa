@@ -54,25 +54,37 @@
 								{{ trans('messages.payment.paypal') }} 
 								</option>
 							@endif
+							
+							@if($redenlace_status->value == 1)
+								<option value="red_enlace" data-payment-type="payment-method" data-cc-type="visa" data-cc-name="" data-cc-expire="">
+								{{ trans('messages.payment.redenlace') }} 
+								</option>
+							@endif
 
 							@if($stripe_status->value == 1)  
 								<option value="stripe" data-payment-type="payment-method" data-cc-type="visa" data-cc-name="" data-cc-expire="">
 								{{ trans('messages.payment.stripe') }}
 								</option>
-							@else
+							@endif
+							@if($paypal_status->value != 1 && $redenlace_status->value != 1 && $stripe_status->value != 1)
 								<option value="">
 								{{ trans('messages.payment.disable') }}
 								</option>
 							@endif 
-							@if($razorpay_status->value == 1)
+							{{-- @if($razorpay_status->value == 1)
 								<option value="razorpay" data-payment-type="payment-method" data-cc-type="visa" data-cc-name="" data-cc-expire="">
 								{{ trans('messages.payment.razorpay') }} 
 								</option>
-							@endif
+							@endif --}}
 							
 						</select>
 						<div class="paypal-div">
+							@if($paypal_status->value == 1)
 							<span id='paypal-text'>{{ trans('messages.payment.redirect_to_paypal') }}</span>
+							@endif
+							@if($redenlace_status->value == 1)
+							<span id='paypal-text'>{{ trans('messages.payment.redirect_to_red_enlace') }}</span>
+							@endif
 						</div>
 						
 					</div>
