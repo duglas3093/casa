@@ -16,7 +16,13 @@ class Bank extends Model
 
 
     public function getAll(){
-        return  DB::table('banks')->get();
+        return  DB::table('banks')->getAll();
+        // $data = Cache::get('vr-countries');
+        // if (empty($data)) {
+        //     $data = parent::all();
+        //     Cache::put('vr-countries', $data, 86400);
+        // }
+        // return $data;
     }
     //  public function currency(){
     //     return $this->belongsTo('App\Models\Currency', 'currency_code', 'code');

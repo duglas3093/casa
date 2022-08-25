@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Common;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\{
     Settings,
@@ -21,7 +22,7 @@ use App\Models\{
 
 use App\DataTables\PayoutListDataTable;
 use Auth;
-use DB;
+// use DB;
 use Session;
 use Validator;
 use DateTime;
@@ -39,7 +40,7 @@ class PayoutController extends Controller
     {   
         $data['title'] = 'Payout Setting';
         $data['payouts'] = PayoutSetting::with('payment_methods')->where(['user_id' => Auth::user()->id])->paginate(Session::get('row_per_page'));
-        $data['banks'] = Bank::getAll();
+        $data['banks'] = DB::table('banks')->get();
         $data['countries'] = Country::getAll();
         $data['paymentMethods'] = PaymentMethods::whereNotIn('name', ['Revepay', 'Stripe', 'Wallet'])->get();
 
